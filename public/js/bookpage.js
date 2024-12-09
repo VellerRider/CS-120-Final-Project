@@ -7,13 +7,14 @@ class BookPage {
         this.bookId = new URLSearchParams(window.location.search).get('id');
         this.bookData = null;
         this.isInUserLibrary = false;
+        this.baseUrl = window.location.origin;
         this.init();
     }
 
     async init() {
         try {
             // first, check library_personal
-            const response = await utilsObj.fetchWithAuth(`/api/books/library`);
+            const response = await utilsObj.fetchWithAuth(`${this.baseUrl}/api/books/library`);
             if (!response) return;
             const books = await response.json();
             userData.library = books;
