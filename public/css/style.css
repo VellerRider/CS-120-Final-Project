@@ -549,6 +549,7 @@ button:hover {
     flex-direction: column;
     background: #505050;
     position: relative;
+    z-index: 1001;
 }
 
 .notes-section.active {
@@ -866,7 +867,6 @@ hr {
 .overlay {
     display: none;
 }
-
 @media (max-width: 768px) {
     .overlay {
         position: fixed;
@@ -878,11 +878,9 @@ hr {
         z-index: 999;
         display: none;
     }
-
     .overlay.active {
         display: block;
     }
-
     .notes-section.active {
         position: fixed;
         right: 0;
