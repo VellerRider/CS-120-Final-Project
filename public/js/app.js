@@ -255,7 +255,7 @@ export class App {
         // Add search results to the page
         contentScrollable.appendChild(searchResults);
     
-        this.setupLazyLoading(container);
+        this.setupLazyLoading(searchResults);
 
         // Add a back button event listener
         searchResults.querySelector('.back-to-library').addEventListener('click', () => {
@@ -273,7 +273,7 @@ export class App {
         container.innerHTML = userData.library
             .map(book => components.renderBookCard(book))
             .join('');
-        this.setupLazyLoading()
+        this.setupLazyLoading(container)
     }
 
     loadCurrentReading() {
