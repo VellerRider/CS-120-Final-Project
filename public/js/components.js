@@ -4,7 +4,7 @@ export const components = {
         return `
             <div class="book-card" data-book-id="${book.book_id}">
                 <div class="book-cover">
-                   <img src="${book.book_image}" alt="${book.book_title}">
+                   <img src="images/placeholder.jpg" data-src="${book.book_image}" alt="${book.book_title}">
                 </div>
                 <div class="book-info">
                     <div class="book-title">${book.book_title}</div>
@@ -41,7 +41,7 @@ export const components = {
         return `
             <div class="recommendation-card" data-book-id="${book.book_id}">
                 <div class="recommendation-cover">
-                    <img src="${book.book_image}" alt="${book.book_title}">
+                    <img src="${book.book_image}" alt="${book.book_title}" loading="lazy">
                 </div>
                 <div class="recommendation-info">
                     <div class="recommendation-title">${book.book_title}</div>

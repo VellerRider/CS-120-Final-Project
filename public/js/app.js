@@ -255,6 +255,8 @@ export class App {
         // Add search results to the page
         contentScrollable.appendChild(searchResults);
     
+        this.setupLazyLoading(container);
+
         // Add a back button event listener
         searchResults.querySelector('.back-to-library').addEventListener('click', () => {
             // Remove search results
@@ -271,6 +273,7 @@ export class App {
         container.innerHTML = userData.library
             .map(book => components.renderBookCard(book))
             .join('');
+        this.setupLazyLoading()
     }
 
     loadCurrentReading() {
@@ -312,6 +315,33 @@ export class App {
             viewAllBtn.addEventListener('click', () => this.showAllLibrary());
         });
     }
+
+setupLazyLoading(container = document) {
+    if ('IntersectionObserver' in window) {
+
+        if (!this.imageObserver) {
+            this.imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        this.imageObserver.unobserve(img);
+                    }
+                });
+            });
+        }
+        
+        container.querySelectorAll('img[data-src]').forEach(img => {
+            this.imageObserver.observe(img);
+        });
+    } else {
+        container.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
+    }
+}
 
     setupEventListeners() {
         // sidebar toggle event listener
@@ -369,6 +399,7 @@ export class App {
         // viewall
         const libraryViewAll = document.querySelector('.library .view-all');
         libraryViewAll?.addEventListener('click', () => this.showAllLibrary());
+        this.setupLazyLoading()
     }
 }
 
