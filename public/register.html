@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Book Database</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/auth.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register - Book Database</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-box">
-            <h1>Register</h1>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit">Register</button>
-            </form>
-            <p>Already have an account? <a href="/login.html">Login</a></p>
+  <div class="auth-container">
+    <div class="auth-box">
+      <h1>Register</h1>
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" required minlength="6" 
+                 title="min length of username: 6">
         </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required minlength="6" 
+                 title="min length of password: 6">
+        </div>
+        <div id="errorMsg" style="color: red; margin-bottom: 1em;"></div>
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="/login.html">Login</a></p>
     </div>
-    <script type="module">
-        import { App } from '/js/app.js';
-        const app = new App();
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            await app.register(username, password);
-        });
-    </script>
+  </div>
+
+  <script type="module">
+    import { App } from '/js/app.js';
+    const app = new App();
+
+    const form = document.getElementById('registerForm');
+    const userInput = document.getElementById('username');
+    const passInput = document.getElementById('password');
+    const errDiv   = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      errDiv.textContent = '';
+
+      const username = userInput.value.trim();
+      const password = passInput.value.trim();
+
+      if (username.length < 6) {
+        errDiv.textContent = 'Min length of username: 6';
+        userInput.focus();
+        return;
+      }
+      if (password.length < 6) {
+        errDiv.textContent = 'password should be at least 6 digits';
+        passInput.focus();
+        return;
+      }
+
+      try {
+        await app.register(username, password);
+      } catch (err) {
+        errDiv.textContent = err.message || 'login failed';
+      }
+    });
+
+
+  </script>
 </body>
 </html>
