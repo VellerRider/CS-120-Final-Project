@@ -26,15 +26,5 @@
         </div>
     </div>
     <script type="module" src="/js/router.js"></script>
-    <script type="module">
-        import { App } from '/js/app.js';
-        const app = new App();
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            await app.login(username, password);
-        });
-    </script>
 </body>
 </html>

@@ -435,8 +435,8 @@ class BookPage {
             changeStatus.style.display = 'block';
 
             noteToggleBtn.style.display = 'block';  
-            notesSection.classList.add('active');
-            overlay.classList.add('active');
+            // notesSection.classList.add('active');
+            // overlay.classList.add('active');
 
             document.getElementById('readingStatus').value = this.bookData.book_status;
             document.getElementById('readingStatus')?.addEventListener('change', async (event) => {

@@ -10,6 +10,7 @@ export class App {
         this.refreshToken = localStorage.getItem('refreshToken');
         this.mainLibraryView = new MainLibraryView(userData);
         this.searchModule = new SearchModule(userData);
+        this.sidebarLoaded = false;
         this.init();
     }
 
@@ -21,10 +22,7 @@ export class App {
 
         try {
             // load all
-            await Promise.all([
-                this.fetchUserLibrary(),
-                this.fetchInfo()
-            ]);
+            await this.fetchUserLibrary();
             
             const urlParams = new URLSearchParams(window.location.search);
             const searchTerm = urlParams.get('search');
@@ -44,8 +42,6 @@ export class App {
             
             this.mainLibraryView.renderInfo();
             
-            // load recommendations
-            this.loadRecommendations();
             
             this.setupEventListeners();
         } catch (error) {
@@ -55,16 +51,6 @@ export class App {
             }
         }
     }
-    
-    async loadRecommendations() {
-        try {
-        const recModule = new RecommendationsModule(userData);
-        await recModule.loadAndRender();
-        } catch (error) {
-        console.error('Error loading recommendations:', error);
-        }
-    }
-
     async fetchUserLibrary() {
         try {
             const response = await utilsObj.fetchWithAuth('/api/books/library');
@@ -81,6 +67,16 @@ export class App {
             console.error('Error fetching library:', error);
         }
     }
+    
+    async loadRecommendations() {
+        try {
+            const recModule = new RecommendationsModule(userData);
+            await recModule.loadAndRender();
+        } catch (error) {
+            console.error('Error loading recommendations:', error);
+        }
+    }
+
 
     async fetchInfo() {
         try {
@@ -101,10 +97,22 @@ export class App {
         const columnRight = document.querySelector('.column-right');
         document.getElementById('logoutButton')?.addEventListener('click', this.logout.bind(this));
         
-        menuToggle?.addEventListener('click', () => {
+        menuToggle?.addEventListener('click', async () => {
             const overlay = document.getElementById('overlay');
             columnRight.classList.toggle('active');
             overlay.classList.toggle('active');
+            if (columnRight.classList.contains('active') && !this.sidebarLoaded) {
+                try {
+                        await Promise.all([
+                                this.fetchInfo(),
+                                this.loadRecommendations()
+                        ]);
+                        this.mainLibraryView.renderInfo();
+                        this.sidebarLoaded = true;
+                } catch (error) {
+                        console.error('Error loading sidebar content:', error);
+                }
+            }
             if (window.innerWidth <= 768) {
                 document.body.style.overflow = columnRight.classList.contains('active') ? 'hidden' : 'auto';
             }

@@ -29,5 +29,6 @@ export class RecommendationsModule {
         container.innerHTML = this.userData.recommendations
             .map(book => renderRecommendationCard(book))
             .join('');
+        
     }
 }

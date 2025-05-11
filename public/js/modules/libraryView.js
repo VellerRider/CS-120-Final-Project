@@ -7,6 +7,17 @@ export class MainLibraryView {
         this.userData = userData;
         this.imageObserver = null;
     }
+    renderCurrentReadings() {
+        const container = document.getElementById('currentReadingContainer');
+        if (!container) return;
+        
+        const currentReading = this.userData.library.filter(book => book.book_status === 'In Progress');
+        container.innerHTML = currentReading
+            .map(book => renderCurrentReading(book))
+            .join('');
+        
+        this.setupLazyLoading(container);
+    }
     
     renderLibrary() {
         const container = document.getElementById('libraryContainer');
@@ -18,15 +29,6 @@ export class MainLibraryView {
         this.setupLazyLoading(container);
     }
 
-    renderCurrentReadings() {
-        const container = document.getElementById('currentReadingContainer');
-        if (!container) return;
-        
-        const currentReading = this.userData.library.filter(book => book.book_status === 'In Progress');
-        container.innerHTML = currentReading
-            .map(book => renderCurrentReading(book))
-            .join('');
-    }
     
     renderInfo() {
         const container = document.getElementById('infoContainer');

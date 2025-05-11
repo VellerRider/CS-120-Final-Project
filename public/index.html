@@ -48,6 +48,14 @@
                       <div class="section-title">Current Reading</div>
                   </div>
                   <div class="current-reading-grid" id="currentReadingContainer">
+                    <!-- add a place holder to reduce CLS -->
+                    <div class="book-card" id="placeholder-card">
+                        <div class="book-cover">
+                            <img src="images/placeholder.svg" alt="placeholder">
+                        </div>
+                        <div class="book-title" style="opacity: 0.01;">Placeholder</div>
+                        <div class="book-author" style="opacity: 0.01;">Placeholder</div>
+                    </div>
                       <!-- load current reading -->
                   </div>
               </div>
