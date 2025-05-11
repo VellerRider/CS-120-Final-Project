@@ -190,6 +190,46 @@ class BookPage {
         }
     }
 
+    // request to remove book from user's library
+    async removeFromLibrary() {
+        const result = await Swal.fire({
+            title: 'Remove Book',
+            text: 'Are you sure you want to remove this book from your library? All associated notes will be deleted.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Remove',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await utilsObj.fetchWithAuth(`/api/books/library/${this.bookId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to remove book from library');
+                }
+
+                userData.library = userData.library.filter(book => book.book_id !== parseInt(this.bookId));
+                
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Book has been removed from your library',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = '/';
+                });
+            } catch (error) {
+                console.error('Error removing book from library:', error);
+                Swal.fire('Error', 'Failed to remove book. Please try again.', 'error');
+            }
+        }
+    }
+
     // show all external reviews
     async showAllReviews() {
         if (!this.bookData.reviews || this.bookData.reviews.length === 0) {
@@ -418,6 +458,7 @@ class BookPage {
     
         const addToLibraryBtn = document.getElementById('addToLibraryBtn');
         const changeStatus = document.getElementById('changeStatus');
+        const removeBookBtn = document.getElementById('removeBookBtn');
 
         const noteToggleBtn = document.getElementById('noteToggleBtn');
         const notesSection = document.getElementById('notesSection');
@@ -438,6 +479,13 @@ class BookPage {
             // notesSection.classList.add('active');
             // overlay.classList.add('active');
 
+            // remove button setup
+            removeBookBtn.style.display = 'block';
+            removeBookBtn.addEventListener('click', () => {
+                this.removeFromLibrary();
+            });
+
+            // status dropdown 
             document.getElementById('readingStatus').value = this.bookData.book_status;
             document.getElementById('readingStatus')?.addEventListener('change', async (event) => {
                 try {
@@ -446,6 +494,7 @@ class BookPage {
                     console.error('Error changing status:', error);
                 }
             });
+            
     
             // Edit review
             document.getElementById('editReviewBtn')?.addEventListener('click', () => {
@@ -501,6 +550,8 @@ class BookPage {
             // Book is not in the user's library
             addToLibraryBtn.style.display = 'block';
             changeStatus.style.display = 'none';
+            removeBookBtn.style.display = 'none';
+
 
             notesSection.style.display = "none";
             document.getElementById('addToLibraryBtn')?.addEventListener('click', () => {

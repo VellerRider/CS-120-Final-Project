@@ -26,7 +26,15 @@
                 <div class="book-scrollable-content">
                     <div id="bookCard">
                         <!-- render big book card here -->
-                        
+                    </div>
+                    
+                    <div class="reading-status-container" id="changeStatus">
+                        <label for="readingStatus">Reading Status:</label>
+                        <select id="readingStatus">
+                            <option value="Not Started">Not Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
                     </div>
 
                     <div class="user-review" id="userReview">
@@ -39,19 +47,12 @@
                         <button class="add-to-library-button" id="addToLibraryBtn">ADD TO LIBRARY</button>
                     </div>
 
-                    <div class="reading-status-container" id="changeStatus">
-                        <label for="readingStatus">Reading Status:</label>
-                        <select id="readingStatus">
-                            <option value="Not Started">Not Started</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                        </select>
-                    </div>
                     
                     <div class="external-reviews" id="externalReviews">
                         <!-- render book reviews from external api here -->
-
                     </div>
+
+                    <button class="remove-book-button" id="removeBookBtn">REMOVE</button>
                 </div>
 
             </div>

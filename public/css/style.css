@@ -1019,3 +1019,19 @@ hr {
 .add-ps-btn:hover {
     background-color: #2563eb;
 }
+
+.remove-book-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    padding: 4px 8px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-book-button:hover {
+    background-color: #c82333;
+}

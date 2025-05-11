@@ -74,7 +74,7 @@ export class SearchModule {
     }
     
     setupLazyLoading(container) {
-        import('../views/libraryView.js').then(module => {
+        import('./libraryView.js').then(module => {
             const view = new module.MainLibraryView(this.userData);
             view.setupLazyLoading(container);
         });

@@ -292,6 +292,37 @@ app.post('/api/books/library', auth, async (req, res) => {
     }
 })
 
+// delete a book from users library
+app.delete('/api/books/library/:id', auth, async (req, res) => {
+    try {
+        const bookId = req.params.id;
+        
+        
+        await queryWithRetry(
+            'DELETE FROM book_notes WHERE book_id = ? AND user_id = ?',
+            [bookId, req.user.user_id]
+        );
+        
+        const result = await queryWithRetry(
+            'DELETE FROM library_personal WHERE book_id = ? AND user_id = ?',
+            [bookId, req.user.user_id]
+        );
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Book not found in your library' });
+        }
+        
+        res.json({ message: 'Book removed successfully' });
+    } catch (error) {
+        await queryWithRetry('ROLLBACK');
+        console.error('Error removing book from library:', error);
+        res.status(500).json({ 
+            message: 'Internal server error',
+            details: error.message
+        });
+    }
+});
+
 // change reading status of a book
 app.put('/api/books/status', auth, async (req, res) => {
     try {
