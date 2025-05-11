@@ -1,6 +1,7 @@
+/* deprecated after modulization */
 import { utilsObj } from "./utilsObj.js";
 import { userData } from './data.js';
-import { components } from './components.js';
+import { components } from './components/components.js';
 
 export class App {
     constructor() {

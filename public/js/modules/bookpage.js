@@ -1,7 +1,9 @@
-import { utilsObj } from "./utilsObj.js";
-import { userData } from "./data.js";
-import { components } from "./components.js";
-
+import { utilsObj } from "../utilsObj.js";
+import { userData } from "../data.js";
+import { renderPageBook } from "../components/pageBook.js";
+import { renderUserReview } from "../components/userReview.js"
+import { renderExternalReview } from "../components/externalReview.js"
+import { renderNote } from "../components/bookNote.js"
 class BookPage {
     constructor() {
         this.bookId = new URLSearchParams(window.location.search).get('id');
@@ -66,18 +68,18 @@ class BookPage {
             return;
         }
 
-        bookCard.innerHTML = components.renderPageBook(this.bookData);
+        bookCard.innerHTML = renderPageBook(this.bookData);
     }
     
     loadUserReview() {
         const container = document.getElementById("userReview");
-        container.innerHTML = components.renderUserReview(this.bookData);
+        container.innerHTML = renderUserReview(this.bookData);
     }
 
 
     loadExternalReviews() {
         const container = document.getElementById("externalReviews");
-        container.innerHTML = components.renderExternalReview(this.bookData);
+        container.innerHTML = renderExternalReview(this.bookData);
     }
 
     async loadNotes() {
@@ -87,7 +89,7 @@ class BookPage {
             const notes = await res.json();
             const container = document.getElementById("userNotes");
             container.innerHTML = notes.map(note => 
-                components.renderNote(note)
+                renderNote(note)
             ).join('');
         } catch (error) {
             console.error("Error loading notes:", error)

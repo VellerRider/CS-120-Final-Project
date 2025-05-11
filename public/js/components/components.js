@@ -1,3 +1,4 @@
+/* deprecated after splitting modules */
 export const components = {
     // main page
     renderBookCard(book) {
